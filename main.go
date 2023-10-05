@@ -1,4 +1,4 @@
-package main
+package addons_receipt
 
 import (
 	"fmt"
