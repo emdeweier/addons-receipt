@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func cutStringReceiptV2(req string, length int, height int, cutDot bool) []string {
+func CutStringReceiptV2(req string, length int, height int, cutDot bool) []string {
 	var arrayString []string
 	if height > 1 {
 		height = 1
