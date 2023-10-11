@@ -109,7 +109,7 @@ func Receipt(transactionId, transactionName string, isFirstHeaderVisible bool, l
 
 	pdf.CellFormat(0, lineHt, transactionId, "0", 0, "LM", false, 0, "")
 	pdf.CellFormat(1, lineHt, "", "0", 0, "CM", false, 0, "")
-	pdf.CellFormat(0, lineHt, strings.ToUpper(transactionName), "0", 0, "RM", false, 0, "")
+	pdf.CellFormat(0, lineHt, transactionName, "0", 0, "RM", false, 0, "")
 
 	y := paper.TransactionTextSetup.LowerSpace
 	if len(listModel) > 0 {
