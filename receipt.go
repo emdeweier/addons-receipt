@@ -2,11 +2,12 @@ package addons_receipt
 
 import (
 	"fmt"
-	"github.com/emdeweier/addons-receipt/assets/utils"
-	"github.com/jung-kurt/gofpdf"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/emdeweier/addons-receipt/lib/utils"
+	"github.com/jung-kurt/gofpdf"
 )
 
 func Receipt(transactionId, transactionName string, isFirstHeaderVisible bool, listModel []utils.ListModelData, paperSize string) (gofpdf.Pdf, error) {
@@ -92,9 +93,9 @@ func Receipt(transactionId, transactionName string, isFirstHeaderVisible bool, l
 		pdf.SetY(paper.FooterSetup.Y)
 		pdf.SetFont("BRIDigital", "", paper.FooterSetup.FontSize)
 		pdf.SetWordSpacing(paper.FooterSetup.WordSpacing)
-		pdf.CellFormat(0, lineHt, "This Receipt is printed by BRI Cash Management System", "0", 0, "CM", false, 0, "")
+		pdf.CellFormat(0, lineHt, "This Document is Printed By Q-Cash Management", "0", 0, "CM", false, 0, "")
 		pdf.SetY(pdf.GetY() + 4)
-		pdf.CellFormat(0, lineHt, "PT Bank Rakyat Indonesia Persero Tbk", "0", 0, "CM", false, 0, "")
+		pdf.CellFormat(0, lineHt, "PT Bank Rakyat Indonesia (Persero) TBK", "0", 0, "CM", false, 0, "")
 		pdf.SetY(pdf.GetY() + 4)
 		pdf.CellFormat(0, lineHt, exportedAt, "0", 0, "CM", false, 0, "")
 		//html.Write(3, fmt.Sprintf("<center>%s<br>%s<br>%s</center>", "This Receipt is printed by BRI Cash Management System", "", exportedAt))

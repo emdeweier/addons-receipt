@@ -1,10 +1,11 @@
 package addons_receipt
 
 import (
-	"github.com/emdeweier/addons-receipt/assets/utils"
-	"github.com/jung-kurt/gofpdf"
 	"reflect"
 	"testing"
+
+	"github.com/emdeweier/addons-receipt/lib/utils"
+	"github.com/jung-kurt/gofpdf"
 )
 
 func TestReceipt(t *testing.T) {
