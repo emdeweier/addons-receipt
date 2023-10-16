@@ -116,7 +116,7 @@ func CutDotWord(word string, maxLength int) []string {
 }
 
 // this function implement nextline/neter every maxlength
-func textStructuring(req string, maxLength int, height int, cutDot bool) (result []string) {
+func TextStructuring(req string, maxLength int, height int, cutDot bool) (result []string) {
 
 	arrString := strings.Split(req, " ")
 
