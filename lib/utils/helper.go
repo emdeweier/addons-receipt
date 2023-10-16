@@ -78,3 +78,126 @@ func CutStringReceiptV2(req string, length int, height int, cutDot bool) []strin
 
 	return arrayString
 }
+
+func NewLineWord(word string, maxLength int, lengthWord int, height int) (result []string) {
+
+	for i := 0; i < lengthWord; i += maxLength {
+
+		if i+maxLength > lengthWord {
+			result = append(result, word[i:])
+			return
+		}
+
+		result = append(result, word[i:i+(maxLength-1)])
+
+		if height > 0 {
+			if len(result) >= height {
+				return
+			}
+		}
+
+	}
+
+	return
+}
+
+// this param word must be contains maxlength character
+// if the text not true value return add three dot
+func CutDotWord(word string, maxLength int) []string {
+	lengthWord := len(word)
+
+	if lengthWord < maxLength {
+		return []string{word + "..."}
+	}
+
+	word = word[:maxLength-1]
+
+	return []string{word + "..."}
+}
+
+// this function implement nextline/neter every maxlength
+func textStructuring(req string, maxLength int, height int, cutDot bool) (result []string) {
+
+	arrString := strings.Split(req, " ")
+
+	if len(arrString) == 0 {
+		return
+	}
+
+	// TODO if text just have one word
+	if len(arrString) == 1 {
+
+		word := arrString[0]
+		lengthWord := len(word)
+
+		if lengthWord <= maxLength {
+			return arrString
+		}
+
+		if cutDot {
+			return CutDotWord(arrString[0], maxLength)
+		}
+
+		return NewLineWord(word, maxLength, lengthWord, height)
+	}
+
+	var tempArr []string
+	var tempNumberCharacter int
+	for _, v := range arrString {
+
+		if len(result) >= height {
+			goto FINISH
+		}
+
+		lenV := len(v)
+
+		if len(tempArr) > 0 {
+			numberCharacter := (len(tempArr) - 1) + tempNumberCharacter + lenV
+
+			if numberCharacter > maxLength {
+
+				if cutDot {
+					return CutDotWord(strings.Join(tempArr, " ", ), maxLength)
+				}
+
+				result = append(result, strings.Join(tempArr, " "))
+				tempArr = []string{}
+				tempNumberCharacter = 0
+			}
+		}
+
+		if lenV > maxLength {
+			newLineWordRes := NewLineWord(v, maxLength, lenV, height)
+
+			for _, v2 := range newLineWordRes[:len(newLineWordRes)-1] {
+				if len(result) >= height {
+					goto FINISH
+				}
+				result = append(result, v2)
+			}
+
+			if len(result) >= height {
+				goto FINISH
+			}
+
+			lenLastnewLineWordRes := len(newLineWordRes[len(newLineWordRes)-1])
+			if lenLastnewLineWordRes == maxLength {
+				result = append(result, newLineWordRes[len(newLineWordRes)-1])
+				continue
+			}
+
+			tempNumberCharacter += lenLastnewLineWordRes
+			tempArr = append(tempArr, newLineWordRes[len(newLineWordRes)-1])
+			continue
+		}
+
+		tempNumberCharacter += lenV
+		tempArr = append(tempArr, v)
+	}
+
+	result = append(result, strings.Join(tempArr, " "))
+
+FINISH:
+
+	return
+}
