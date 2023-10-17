@@ -134,7 +134,7 @@ func Test_textStructuring(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			res := textStructuring(tt.text, tt.length, tt.height, tt.cutDOt)
+			res := TextStructuring(tt.text, tt.length, tt.height, tt.cutDOt)
 
 			if len(tt.expected) != len(res) {
 				t.Fail()
