@@ -10,7 +10,7 @@ import (
 	"github.com/jung-kurt/gofpdf"
 )
 
-func Receipt(transactionId, transactionName string, isFirstHeaderVisible bool, listModel []utils.ListModelData, paperSize string) (gofpdf.Pdf, error) {
+func Receipt(transactionId, transactionName string, isFirstHeaderVisible bool, listModel []utils.ListModelData, paperSize string) (*gofpdf.Fpdf, error) {
 	var paper utils.Paper
 	log.Println(paper)
 
