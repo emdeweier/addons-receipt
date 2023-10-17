@@ -60,12 +60,12 @@ func Test_textStructuring(t *testing.T) {
 			expected: []string{"AkulahCintaDiLangit..."},
 		},
 		{
-			name:     "one word  newline single line",
+			name:     "one word newline single line",
 			text:     "AkulahCintaDiLangittiga",
 			cutDOt:   false,
 			length:   20,
 			height:   1,
-			expected: []string{"AkulahCintaDiLangit"},
+			expected: []string{"AkulahCintaDiLangitt"},
 		},
 		{
 			name:     "one word 2 line",
@@ -73,7 +73,7 @@ func Test_textStructuring(t *testing.T) {
 			cutDOt:   false,
 			length:   20,
 			height:   2,
-			expected: []string{"AkulahCintaDiLangit", "tiga"},
+			expected: []string{"AkulahCintaDiLangitt", "iga"},
 		},
 		{
 			name:     "one word 5 line",
@@ -81,7 +81,7 @@ func Test_textStructuring(t *testing.T) {
 			cutDOt:   false,
 			length:   20,
 			height:   5,
-			expected: []string{"AkulahCintaDiLangit", "tiga"},
+			expected: []string{"AkulahCintaDiLangitt", "iga"},
 		},
 		{
 			name:     "normal",
@@ -100,28 +100,36 @@ func Test_textStructuring(t *testing.T) {
 			expected: []string{"Akulah Cinta Di..."},
 		},
 		{
-			name:     "have word long",
+			name:     "normal have word long",
 			text:     "Akulah Cinta Di AkulahCintaDiLangittiga Langit Prudence Lovely Princess Of Awanamp",
 			cutDOt:   false,
 			length:   20,
 			height:   5,
-			expected: []string{"Akulah Cinta Di", " AkulahCintaDiLangit", "tiga Langit Prudence", "Lovely Princess Of", "Awanamp"},
+			expected: []string{"Akulah Cinta Di", "AkulahCintaDiLangitt", "iga Langit Prudence", "Lovely Princess Of", "Awanamp"},
 		},
 		{
-			name:     "have word long with 3 line",
+			name:     "normal have word long with 3 line",
 			text:     "Akulah Cinta Di AkulahCintaDiLangittiga Langit Prudence Lovely Princess Of Awanamp",
 			cutDOt:   false,
 			length:   20,
 			height:   3,
-			expected: []string{"Akulah Cinta Di", " AkulahCintaDiLangit", "tiga Langit Prudence"},
+			expected: []string{"Akulah Cinta Di", "AkulahCintaDiLangitt", "iga Langit Prudence"},
 		},
 		{
-			name:     "have word long with 2 line",
+			name:     "normal have word long with 2 line",
 			text:     "Akulah Cinta Di AkulahCintaDiLangittiga Langit Prudence Lovely Princess Of Awanamp",
 			cutDOt:   false,
 			length:   20,
 			height:   2,
-			expected: []string{"Akulah Cinta Di", " AkulahCintaDiLangit"},
+			expected: []string{"Akulah Cinta Di", "AkulahCintaDiLangitt"},
+		},
+		{
+			name:     "many word just get first word",
+			text:     "Akulah Cinta Di AkulahCintaDiLangittiga Langit Prudence Lovely Princess Of Awanamp",
+			cutDOt:   false,
+			length:   5,
+			height:   2,
+			expected: []string{"Akula", "h"},
 		},
 	}
 	for _, tt := range tests {
@@ -132,10 +140,10 @@ func Test_textStructuring(t *testing.T) {
 				t.Fail()
 			}
 
-			for _, v := range res {
-				// if tt.expected[i] != v {
-				// 	..t.Fail()
-				// }
+			for i, v := range res {
+				if tt.expected[i] != v {
+					t.Fail()
+				}
 				log.Println("result :", v)
 			}
 

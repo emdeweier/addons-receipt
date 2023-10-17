@@ -88,7 +88,7 @@ func NewLineWord(word string, maxLength int, lengthWord int, height int) (result
 			return
 		}
 
-		result = append(result, word[i:i+(maxLength-1)])
+		result = append(result, word[i:i+(maxLength)])
 
 		if height > 0 {
 			if len(result) >= height {
@@ -157,7 +157,7 @@ func textStructuring(req string, maxLength int, height int, cutDot bool) (result
 			if numberCharacter > maxLength {
 
 				if cutDot {
-					return CutDotWord(strings.Join(tempArr, " ", ), maxLength)
+					return CutDotWord(strings.Join(tempArr, " "), maxLength)
 				}
 
 				result = append(result, strings.Join(tempArr, " "))
