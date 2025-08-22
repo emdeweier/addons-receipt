@@ -30,8 +30,10 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            # build ulang image & restart container
-            sudo docker build -t addons-receipt .
+            # Build image dengan path eksplisit
+            sudo docker build -t addons-receipt -f /opt/project-go/Dockerfile /opt/project-go
+
+            # Restart container
             sudo docker stop addons-receipt || true
             sudo docker rm addons-receipt || true
             sudo docker run -d -p 8080:8080 --name addons-receipt addons-receipt
