@@ -3,36 +3,35 @@ name: Deploy Go App to Docker on VPS
 on:
   push:
     branches:
-      - main  # atau branch lain yang ingin dipantau
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      # Agar GitHub Actions bisa mengakses kode
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        eval "$(ssh-agent -s)"
-        echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
-      # Menggunakan private key SSH yang ada di Secrets
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-    - name: Deploy to VPS
-      run: |
-        # SSH ke VPS dan lakukan pull repo serta build Docker image
-        # Login ke VPS dan pull image terbaru
-        ssh -o StrictHostKeyChecking=no marzotadwi@103.187.147.156 "
-          cd ~ && \
-          git clone https://github.com/emdeweier/addons-receipt.git && \
-          cd repo && \
-          docker build -t addons-receipt . && \
-          docker stop addons-receipt || true && \
-          docker rm addons-receipt || true && \
-          docker run -d -p 8080:8080 --name addons-receipt addons-receipt
-        "
+      - name: Deploy to VPS
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            set -e
+            cd /opt/project-go || git clone https://github.com/emdeweier/addons-receipt.git /opt/project-go
+            cd /opt/project-go
+            git fetch origin main
+            git reset --hard origin/main
+
+            # build ulang image & restart container
+            sudo docker build -t apps .
+            sudo docker stop apps || true
+            sudo docker rm apps || true
+            sudo docker run -d -p 8080:8080 --name apps apps
+          EOF
