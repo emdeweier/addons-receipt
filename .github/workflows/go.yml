@@ -24,7 +24,7 @@ jobs:
       run: |
         # SSH ke VPS dan lakukan pull repo serta build Docker image
         # Login ke VPS dan pull image terbaru
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} marzotadwi@103.187.147.156 "
+        ssh -o StrictHostKeyChecking=no marzotadwi@103.187.147.156 "
           cd ~ && \
           git clone https://github.com/emdeweier/addons-receipt.git && \
           cd repo && \
