@@ -1,26 +1,28 @@
-# Menggunakan image golang sebagai base image
-FROM golang:1.20 AS builder
+# Stage 1: build aplikasi
+FROM golang:1.21 AS builder
 
-# Set working directory di dalam container
 WORKDIR /app
 
-# Menyalin go.mod dan go.sum (untuk dependensi)
+# Copy go.mod dan go.sum dulu supaya cache dependency
 COPY go.mod go.sum ./
+RUN go mod download
 
-# Install dependensi Go
-RUN go mod tidy
-
-# Menyalin seluruh kode aplikasi ke dalam container
+# Copy semua source code
 COPY . .
 
-# Membangun aplikasi Go
-RUN go build -o addons-receipt .
+# Build binary
+RUN go build -o app .
 
-# Stage kedua untuk image runtime
-FROM gcr.io/distroless/base
+# Stage 2: image final yang ringan
+FROM debian:bookworm-slim
 
-# Menyalin hasil build dari stage pertama
-COPY --from=builder /app/addons-receipt /addons-receipt
+WORKDIR /app
 
-# Menentukan perintah untuk menjalankan aplikasi
-CMD ["/addons-receipt"]
+# Copy binary hasil build
+COPY --from=builder /app/app .
+
+# Expose port aplikasi (ubah sesuai port aplikasi Go kamu)
+EXPOSE 8080
+
+# Jalankan aplikasi
+CMD ["./app"]
