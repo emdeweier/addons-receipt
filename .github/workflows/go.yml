@@ -32,8 +32,8 @@ jobs:
             git reset --hard origin/main
 
             # build ulang image & restart container
-            sudo docker build -t apps .
-            sudo docker stop apps || true
-            sudo docker rm apps || true
-            sudo docker run -d -p 8080:8080 --name apps apps
+            sudo docker build -t addons-receipt .
+            sudo docker stop addons-receipt || true
+            sudo docker rm addons-receipt || true
+            sudo docker run -d -p 8080:8080 --name addons-receipt addons-receipt
           EOF
