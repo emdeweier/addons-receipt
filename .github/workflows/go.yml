@@ -39,7 +39,7 @@ jobs:
     - name: Deploy to VPS
       run: |
         # Login ke VPS dan pull image terbaru
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} user@vps-ip-address "
+        ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} marzotadwi@103.187.147.156 "
           docker pull username/addons-receipt:latest && 
           docker stop addons-receipt || true &&
           docker rm addons-receipt || true &&
