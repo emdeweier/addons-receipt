@@ -14,7 +14,7 @@ RUN go mod tidy
 COPY . .
 
 # Membangun aplikasi Go
-RUN go build -o myapp .
+RUN go build -o addons-receipt .
 
 # Stage kedua untuk image runtime
 FROM gcr.io/distroless/base
