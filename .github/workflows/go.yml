@@ -26,12 +26,12 @@ jobs:
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             set -e
-            cd /project-go
+            cd ~/project-go
             git fetch origin main
             git reset --hard origin/main
             
             # Build image dengan path eksplisit
-            sudo docker build -t addons-receipt -f /project-go/Dockerfile /project-go
+            sudo docker build -t addons-receipt -f ~/project-go/Dockerfile ~/project-go
 
             # Restart container
             sudo docker stop addons-receipt || true
