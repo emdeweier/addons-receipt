@@ -1,34 +1,39 @@
-name: Deploy Golang App
+name: Deploy Go App to Docker on VPS
 
 on:
   push:
     branches:
-      - main   # jalankan saat push ke branch main
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          echo "${{ secrets.SSH_PASSPHRASE }}" | ssh-add ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             set -e
+            cd /opt/project-go || git clone https://github.com/emdeweier/addons-receipt.git /opt/project-go
             cd /opt/project-go
-
-            # pull update dari github
             git fetch origin main
             git reset --hard origin/main
 
-            # build ulang container
-            sudo docker-compose down
-            sudo docker-compose up -d --build
+            # build ulang image & restart container
+            sudo docker build -t apps .
+            sudo docker stop apps || true
+            sudo docker rm apps || true
+            sudo docker run -d -p 8080:8080 --name apps apps
           EOF
