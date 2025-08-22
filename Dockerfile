@@ -14,6 +14,9 @@ COPY . .
 # Build binary dengan nama addons-receipt
 RUN go build -o addons-receipt .
 
+# pastikan binary bisa dieksekusi
+RUN chmod +x addons-receipt
+
 # Stage 2: image ringan untuk run
 FROM debian:bookworm-slim
 
