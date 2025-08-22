@@ -18,6 +18,7 @@ jobs:
       uses: webfactory/ssh-agent@v0.5.3
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
       # Menggunakan private key SSH yang ada di Secrets
 
     - name: Deploy to VPS
